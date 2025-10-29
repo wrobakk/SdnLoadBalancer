@@ -5,6 +5,13 @@ This project aims to build a simple load balancer in a Software Defined Networki
 Network traffic from clients is forwarded to different servers based on a hash of their IP addresses.  
 The network is built using Mininet, and traffic is managed by the Floodlight controller.
 
+
+## Authors
+- Piotr Kostrzewa
+- Wojciech Robak
+- Filip Jemioło
+- Piotr Karcz
+
 ## Literature
 
  1. **Nasution, R. A., Siregar, H., & Sihotang, H. T. (2022).**  
