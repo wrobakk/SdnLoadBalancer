@@ -9,47 +9,39 @@ The network is emulated using **Mininet**, while forwarding decisions and load b
 
 ---
 
-## Project Goals
-The main objectives of the project are:
-- Design and implement a load balancing mechanism in SDN
-- Apply IP hash–based traffic distribution
-- Gain practical experience with:
-  - Floodlight controller
-  - OpenFlow rule installation
-  - SDN-based routing and traffic control
-- Analyze load balancing concepts in SDN networks
-
----
-
 ## Load Balancing Principle
-The load balancing mechanism operates as follows:
+The load balancing algorithm is executed during Packet-In processing in the SDN controller.
 
-1. A packet from a client host enters the SDN network
-2. The controller extracts the source IP address
-3. A hash function is applied to the IP address
-4. Based on the hash value, one of the available servers is selected
-5. OpenFlow rules are installed to forward subsequent packets directly in the data plane
+1. A packet without a matching flow entry triggers a Packet-In event and is sent to the controller.
+2. The controller extracts basic flow attributes from the packet:
+   source and destination IP addresses, transport protocol, source and destination ports (for TCP/UDP), and an HTTP indicator.
+3. A hash value is computed from the extracted attributes to uniquely identify the flow.
+4. The controller determines all available paths between the source and destination switches.
+5. One path is selected by mapping the hash value to the set of available paths using a modulo operation.
+6. OpenFlow rules are installed along the selected path so that subsequent packets of the same flow are forwarded directly in the data plane.
 
-This method provides:
-- Deterministic traffic forwarding
-- Low computational complexity
-- Stable client-to-server mapping
 
 ---
 
 ## Network Topology
-The network topology follows a **leaf–spine architecture**, which is commonly used in data center networks.
-
 <img width="1131" height="861" alt="Network topology diagram" src="https://github.com/user-attachments/assets/62f6a4d0-b01b-4c0e-b472-2ba2f47d9482" />
 
-Topology characteristics:
-- Two spine switches forming the network core
-- Multiple leaf switches connected to end hosts
-- Each leaf switch is connected to all spine switches
-- Multiple equal-cost paths enable efficient load distribution
+The topology consists of six OpenFlow switches:
+- Switches: s1, s2
+- Edge switches: l1, l2, l3, l4
 
-The topology is defined using a custom Mininet script.
+Each edge switch is connected to both spine switches and to a single host:
+- h1 ↔ l1
+- h2 ↔ l2
+- h3 ↔ l3
+- h4 ↔ l4
 
+## Running the Topology
+To start the Mininet topology and connect it to the Floodlight controller, run the following command:
+```bash
+sudo mn --custom topology_setup.py --topo mytopo --controller=remote,ip=<controller_ip>,port=6653
+
+```
 ---
 
 ## Host Configuration
