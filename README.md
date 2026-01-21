@@ -1,13 +1,9 @@
 # Hash-Based Load Balancer in SDN
 
 ## Project Overview
-This project presents the implementation of a simple **hash-based load balancer** in a **Software-Defined Networking (SDN)** environment.  
-Network traffic originating from client hosts is distributed among multiple servers based on a **hash of the source IP address**.  
-This approach ensures deterministic server selection and reduces controller overhead once flow rules are installed.
 
-The network is emulated using **Mininet**, while forwarding decisions and load balancing logic are implemented as a custom application running on the **Floodlight SDN controller**.
+This project implements a load balancer based on the IP hash algorithm in a Software-Defined Networking (SDN) environment. The network topology is created using Mininet and controlled by the Floodlight controller. The goal of the project is to test how IP hash–based load balancing works in an SDN network.
 
----
 
 ## Load Balancing Principle
 The load balancing algorithm is executed during Packet-In processing in the SDN controller.
@@ -18,7 +14,7 @@ The load balancing algorithm is executed during Packet-In processing in the SDN 
 3. A hash value is computed from the extracted attributes to uniquely identify the flow.
 4. The controller determines all available paths between the source and destination switches.
 5. One path is selected by mapping the hash value to the set of available paths using a modulo operation.
-6. OpenFlow rules are installed along the selected path so that subsequent packets of the same flow are forwarded directly in the data plane.
+6. OpenFlow rules are installed along the selected path so that subsequent packets of the same flow are forwarded directly throw this route.
 
 
 ---
